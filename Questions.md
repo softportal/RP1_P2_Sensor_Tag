@@ -7,6 +7,25 @@ Habilita las notificaciones de temperatura para que se reciba un mensaje cada ve
 
     char-write-cmd 0x25 01:00
 
+        Notification handle = 0x0024 value: d0 05 b8 0c 
+        Notification handle = 0x0024 value: 38 05 b8 0c 
+        Notification handle = 0x0024 value: b8 05 b8 0c 
+        Notification handle = 0x0024 value: 80 05 b8 0c 
+        Notification handle = 0x0024 value: 7c 05 b8 0c 
+        Notification handle = 0x0024 value: 14 06 b8 0c 
+        Notification handle = 0x0024 value: 88 06 b8 0c 
+        Notification handle = 0x0024 value: b4 05 b4 0c 
+        Notification handle = 0x0024 value: 58 06 b4 0c 
+        Notification handle = 0x0024 value: 9c 06 b4 0c 
+        Notification handle = 0x0024 value: bc 06 b4 0c 
+        Notification handle = 0x0024 value: 94 07 b0 0c 
+        Notification handle = 0x0024 value: 54 07 ac 0c 
+        Notification handle = 0x0024 value: 64 07 a8 0c 
+        Notification handle = 0x0024 value: ec 06 a8 0c 
+        Notification handle = 0x0024 value: 4c 07 a4 0c 
+        Notification handle = 0x0024 value: 28 06 a4 0c 
+
+
 ### 2
 Crea un pequeño programa C que muestre la temperatura ambiente y del objeto a partir de los cuatro bytes recibidos desde el sensor. El programa recibirá como argumento los cuatro bytes devueltos por una petición al SensorTag, y mostrará por pantalla la temperatura ambiente y del objeto en grados centígrados. 
 
