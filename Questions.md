@@ -4,6 +4,9 @@
 
 ###  1
 Habilita las notificaciones de temperatura para que se reciba un mensaje cada vez que ésta cambia. Intenta modificar también la frecuencia de refresco del sensor. 
+
+char-write-cmd 0x27 01:00
+
 ### 2
 Crea un pequeño programa C que muestre la temperatura ambiente y del objeto a partir de los cuatro bytes recibidos desde el sensor. El programa recibirá como argumento los cuatro bytes devueltos por una petición al SensorTag, y mostrará por pantalla la temperatura ambiente y del objeto en grados centígrados. 
 
