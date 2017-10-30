@@ -48,6 +48,13 @@ Para poder usar gatttool sin el modo interactivo usamos la siguiente sintaxis:
 ### 3
 Repite el proceso anterior con algún otro sensor de entre los disponibles en el SensorTag. Puedes encontrar documentación sobre cómo tratar los datos y los UUID de las características de cada sensor en la guía de usuario del SensorTag (http://processors.wiki.ti.com/index.php/CC2650_SensorTag_User’s_Guide.). 
 
+Vamos a activar el sensor de humedad (todo desde el modo interactivo:
+
+    [B0:91:22:EA:81:04][LE]> char-write-cmd 0x2f 01
+    [B0:91:22:EA:81:04][LE]> char-read-hnd 0x2c
+    Characteristic value/descriptor: 3c 6f c8 2d 
+
+
 ### 4
 Diseña y escribe un sistema cliente/servidor en el que el cliente se ejecute en la Ci40 y el servidor en la máquina virtual. El cliente realizará consultas para el valor de un sensor determinado (proporcionado a través de línea de comandos por el usuario) a través de BLE, y lo enviará a través de UDP al servidor junto con información sobre qué sensor se está monitorizando y la dirección hardware del dispositivo sensor. Aunque existe una API para desarrollo de aplicaciones BLE en Linux (Bluez), simplificaremos el desarrollo mediante el uso directo de la herramienta gatttool desde el propio programa en C. Para ello, utiliza la llamada al sistema popen (por ejemplo),que permite ejecutar directamente los comandos pasados como parámetro. Un posible modo de funcionamiento del programa cliente sería el siguiente:
 
