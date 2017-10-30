@@ -29,6 +29,11 @@ Habilita las notificaciones de temperatura para que se reciba un mensaje cada ve
 ### 2
 Crea un pequeño programa C que muestre la temperatura ambiente y del objeto a partir de los cuatro bytes recibidos desde el sensor. El programa recibirá como argumento los cuatro bytes devueltos por una petición al SensorTag, y mostrará por pantalla la temperatura ambiente y del objeto en grados centígrados. 
 
+Para poder usar gatttool sin el modo interactivo usamos la siguiente sintaxis:
+
+    $ gatttool -b B0:91:22:EA:81:04 --characteristics
+
+
 ### 3
 Repite el proceso anterior con algún otro sensor de entre los disponibles en el SensorTag. Puedes encontrar documentación sobre cómo tratar los datos y los UUID de las características de cada sensor en la guía de usuario del SensorTag (http://processors.wiki.ti.com/index.php/CC2650_SensorTag_User’s_Guide.). 
 
