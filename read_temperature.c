@@ -3,8 +3,11 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <inttypes.h>
+#include <string.h>
 
 typedef int bool;
+
+#define PAIR 4
 #define true 1
 #define false 0
 
@@ -12,29 +15,36 @@ void sensorTmp007Convert(uint16_t rawAmbTemp, uint16_t rawObjTemp, float * tAmb,
 bool str_to_uint(char *input, uint16_t *output);
 
 
+    //str_to_uint("0x0854", &global);
+    //str_to_uint("0x0ff4", &local);
 void main(int args,char * argv[]){
-
-    //uint16_t r = 0x0854;
-    uint16_t global = 0x0854;
-    uint16_t local = 0x0ff4;
+    char global_str[PAIR*2];
+    char local_str[PAIR*2];
+    uint16_t global, local;
     float a, b;
+    memset (global_str, '\0', PAIR*2);
+    memset (local_str, '\0', PAIR*2);
+
+    global_str[0] = '0';
+    global_str[1] = 'x';
+    global_str[2] = argv[2][0];
+    global_str[3] = argv[2][1];
+    global_str[4] = argv[1][0];
+    global_str[5] = argv[1][1];
+
+    local_str[0] = '0';
+    local_str[1] = 'x';
+    local_str[2] = argv[4][0];
+    local_str[3] = argv[4][1];
+    local_str[4] = argv[3][0];
+    local_str[5] = argv[3][1];
+
+    str_to_uint(global_str, &global);
+    str_to_uint(local_str, &local);
+
 
     sensorTmp007Convert(global, local, &a, &b);
 	printf("global = %f, local= %f\n", a, b);
-
-    char* str = "0x058f";
-
-    int i;
-    unsigned u;
-    if (sscanf(str, "%x", &u) != 1)
-        printf("fail\n");
-    i = (int) u;
-
-    uint16_t u16;
-    str_to_uint(str, &u16);
-
-    printf("i: 0x%04x  i16: 0x%04" PRIx16 "\n", i, u16);
-
 }
 
 bool str_to_uint(char *input, uint16_t * output){
