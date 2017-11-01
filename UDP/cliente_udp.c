@@ -3,7 +3,9 @@
 
 #include "common.h"
 
+#define COMMAND_LENGTH 64
 #define PUERTO_REMOTO PUERTO /* puerto remoto en el servidor al que se envian los mensajes */
+#define MAC "B0:91:22:EA:81:04"
 
 int main (int argc, char *argv[])
 {
@@ -15,12 +17,17 @@ int main (int argc, char *argv[])
         struct idappdata *resultado;    /* mensaje de respuesta recibido */
         int numbytes;                   /* numero de bytes recibidos o enviados */
         size_t sin_size;
+        char command[COMMAND_LENGTH];
+        char command_test[] = "cat temperature";
 
-        if (argc != 2)
+        if (argc != 3)
         {
-                fprintf (stderr, "uso: cliente hostname\n");
+                fprintf (stderr, "uso: cliente hostname sensor\n");
                 exit (1);
         }
+
+        sprintf(command, "gatttool -b %s -a %s --char-read", MAC, argv[2]);
+        printf("la orden parseada es: %s\n", command_test);
 
         /* crea el socket */
         if ((sockfd = socket (AF_INET, SOCK_DGRAM, 0)) == -1)
@@ -32,7 +39,8 @@ int main (int argc, char *argv[])
         their_addr.sin_family = AF_INET;  /* Familia: ordenacion de bytes de la maquina */
         their_addr.sin_port = htons (PUERTO_REMOTO);    /* Puerto: ordenacion de bytes de la red */
         their_addr.sin_addr.s_addr =             /* IP: ordenacion de bytes de la red */
-            inet_addr (argv[1]); memset (&(their_addr.sin_zero), 0, 8);  /* Pone a cero el resto de la estructura */
+            inet_addr (argv[1]);
+        memset (&(their_addr.sin_zero), 0, 8);  /* Pone a cero el resto de la estructura */
 
         my_addr.sin_family = AF_INET;  /* Familia: ordenacion de bytes de la maquina */
         my_addr.sin_port = htons (33333);    /* Puerto: ordenacion de bytes de la red */
