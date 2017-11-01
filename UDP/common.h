@@ -42,5 +42,6 @@ struct idappdata
 /* codigos de operacion (appdata.op) */
 #define OP_MAYUSCULAS           0x0001  /* mayusculas */
 #define OP_MINUSCULAS           0x0002  /* minusculas */
+#define OP_SENSOR_READ          0x0003  /* minusculas */
 #define OP_RESULTADO            0x1000  /* resultado */
 #define OP_ERROR                0xFFFF  /* error */

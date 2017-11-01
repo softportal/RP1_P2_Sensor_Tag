@@ -63,8 +63,8 @@ int main (int argc, char* argv[])
                         continue;
                 }
                 else
-                        printf ("(servidor) operacion solicitada [op 0x%x id %d longitud %d contenido %s]\n",
-                                operation->op, operation->id, operation->len, operation->data);
+                        printf ("(servidor) operacion recibida [op 0x%x id %d longitud %d]\n",
+                                operation->op, operation->id, operation->len);
 
                 /* realiza operacion solicitada por el cliente */
                 error = 0;
@@ -91,6 +91,12 @@ int main (int argc, char* argv[])
                         }
                         resultado.len = cont; /* len */
                         break;
+                case OP_SENSOR_READ:
+                        printf("\n-------\n");
+                        printf("%s", operation->data);
+                        printf("\n-------\n");
+
+                        break;
                 default: /* operacion desconocida */
                         resultado.op = OP_ERROR; /* op */
                         strcpy(resultado.data, "Operacion desconocida");  /* data */
@@ -99,21 +105,6 @@ int main (int argc, char* argv[])
                         break;
                 }
 
-                /* envia resultado de la operacion solicitada por el cliente */
-                if ((numbytes = sendto(sockfd, (char *) &resultado,
-                                       resultado.len + ID_HEADER_LEN, 0,
-                                       (void*)&their_addr,
-                                       sizeof(struct sockaddr_in))) == -1)
-                {
-                        perror ("recv");
-                        continue;
-                }
-                else
-                        printf ("(servidor) mensaje enviado al cliente [longitud %d]\n", numbytes);
-
-                printf ("(servidor) resultado de la operacion solicitada "
-                        "[res 0x%x id %d longitud %d contenido %s]\n",
-                        resultado.op, resultado.id, resultado.len, resultado.data);
         }
 
         /* cierra socket (no se ejecuta nunca) */

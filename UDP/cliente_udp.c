@@ -19,6 +19,8 @@ int main (int argc, char *argv[])
         size_t sin_size;
         char command[COMMAND_LENGTH];
         char command_test[] = "cat temperature";
+        char out_buff[] = "aqui va a venir el resultado biiiitch";
+        char std_out[MAXDATASIZE - HEADER_LEN];
 
         if (argc != 3)
         {
@@ -51,9 +53,11 @@ int main (int argc, char *argv[])
         memset (buf, '\0', MAXDATASIZE); /* Pone a cero el buffer inicialmente */
 
         /* envia mensaje de operacion al servidor */
-        operation.op = OP_MINUSCULAS;   /* op */
+        operation.op = OP_SENSOR_READ;   /* op */
         operation.id = 1; /* id */
-        strcpy(operation.data, "Esta es Una PRUEBA");  /* data */
+
+        sprintf(operation.data,"read request\n\n  MAC: %s\n  sensor: %s\n  message: %s \n",MAC, argv[2], out_buff);
+        //strcpy(operation.data, "Esta es Una PRUEBA");  /* data */
         operation.len = strlen (operation.data);  /* len */
         if ((numbytes = sendto (sockfd, (char *) &operation,
                                 operation.len + ID_HEADER_LEN, 0,
@@ -66,31 +70,10 @@ int main (int argc, char *argv[])
         else
                 printf ("(cliente) mensaje enviado al servidor [longitud %d]\n", numbytes);
 
-        printf ("(cliente) operacion solicitada [op 0x%x id %d longitud %d contenido %s]\n",
-                operation.op, operation.id, operation.len, operation.data);
+        printf ("(cliente) operacion enviada [op 0x%x id %d longitud %d]\n",
+                operation.op, operation.id, operation.len);
 
         /* espera resultado de la operacion */
-        sin_size = sizeof(struct sockaddr_in);
-        if ((numbytes = recvfrom (sockfd, buf, MAXDATASIZE, 0 /* flags */,
-                                  (void*)&their_addr, &sin_size)) == -1)
-        {
-                perror ("recv");
-                exit (1);
-        }
-        printf ("(cliente) mensaje recibido del servidor [longitud %d]\n", numbytes);
-
-
-        resultado = (struct idappdata *) &buf;
-        /* comprueba el número de bytes recibidos */
-        if ((numbytes < ID_HEADER_LEN) || (numbytes != resultado->len + ID_HEADER_LEN))
-                printf ("(cliente) unidad de datos recibida de manera incompleta \n");
-        else
-                if (resultado->id != operation.id)  /* comprueba el identificador del resultado */
-                        printf ("(cliente) unidad de datos recibida con identificador erroneo \n");
-                else
-                        printf ("(cliente) resultado de la operacion solicitada "
-                                "[res 0x%x id %d longitud %d contenido %s]\n",
-                                resultado->op, resultado->id, resultado->len, resultado->data);
 
         /* cierra el socket */
         close (sockfd);
