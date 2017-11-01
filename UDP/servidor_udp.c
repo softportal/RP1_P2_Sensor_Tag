@@ -13,7 +13,6 @@ int main (int argc, char* argv[])
         char buf[MAXDATASIZE];          /* buffer de recepcion */
         int numbytes;                   /* numero de bytes recibidos o enviados */
         struct idappdata *operation;    /* mensaje de operacion recibido */
-        struct idappdata resultado;     /* mensaje de respuesta enviado */
         int error;                      /* indica la existencia de un error */
         int cont;
         size_t sin_size;
@@ -68,29 +67,8 @@ int main (int argc, char* argv[])
 
                 /* realiza operacion solicitada por el cliente */
                 error = 0;
-                resultado.id = operation->id; /* id */
                 switch (operation->op)
                 {
-                case OP_MINUSCULAS: /* minusculas */
-                        resultado.op = OP_RESULTADO; /* op */
-                        for(cont = 0; cont < operation->len; cont++){ /* data */
-                                if (isupper(operation->data[cont]))
-                                        resultado.data[cont] = tolower(operation->data[cont]);
-                                else
-                                        resultado.data[cont] = operation->data[cont];
-                        }
-                        resultado.len = cont; /* len */
-                        break;
-                case OP_MAYUSCULAS: /* mayusculas */
-                        resultado.op = OP_RESULTADO; /* op */
-                        for(cont = 0; cont < operation->len; cont++){ /* data */
-                                if (islower(operation->data[cont]))
-                                        resultado.data[cont] = toupper(operation->data[cont]);
-                                else
-                                        resultado.data[cont] = operation->data[cont];
-                        }
-                        resultado.len = cont; /* len */
-                        break;
                 case OP_SENSOR_READ:
                         printf("\n-------\n");
                         printf("%s", operation->data);
@@ -98,9 +76,6 @@ int main (int argc, char* argv[])
 
                         break;
                 default: /* operacion desconocida */
-                        resultado.op = OP_ERROR; /* op */
-                        strcpy(resultado.data, "Operacion desconocida");  /* data */
-                        resultado.len = strlen (resultado.data);  /* len */
                         error = 1;
                         break;
                 }

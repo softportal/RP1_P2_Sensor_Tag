@@ -14,13 +14,15 @@ int main (int argc, char *argv[])
         struct sockaddr_in my_addr;  /* informacion de la direccion del servidor */
         char buf[MAXDATASIZE];          /* buffer de recepcion */
         struct idappdata operation;     /* mensaje de operacion enviado */
-        struct idappdata *resultado;    /* mensaje de respuesta recibido */
         int numbytes;                   /* numero de bytes recibidos o enviados */
         size_t sin_size;
         char command[COMMAND_LENGTH];
         char command_test[] = "cat temperature";
         char out_buff[] = "aqui va a venir el resultado biiiitch";
-        char std_out[MAXDATASIZE - HEADER_LEN];
+
+        char std_out[RESPONSE_SIZE];
+        memset (std_out, '\0', RESPONSE_SIZE);  /* Pone a cero el resto de la estructura */
+
 
         if (argc != 3)
         {
@@ -29,7 +31,12 @@ int main (int argc, char *argv[])
         }
 
         sprintf(command, "gatttool -b %s -a %s --char-read", MAC, argv[2]);
-        printf("la orden parseada es: %s\n", command_test);
+
+        if (execute_command(command_test, std_out) !=0 )
+        {
+            printf("\ncouldnt execute command\n");
+            exit (1);
+        }
 
         /* crea el socket */
         if ((sockfd = socket (AF_INET, SOCK_DGRAM, 0)) == -1)
@@ -56,7 +63,7 @@ int main (int argc, char *argv[])
         operation.op = OP_SENSOR_READ;   /* op */
         operation.id = 1; /* id */
 
-        sprintf(operation.data,"read request\n\n  MAC: %s\n  sensor: %s\n  message: %s \n",MAC, argv[2], out_buff);
+        sprintf(operation.data,"read request\n\n  MAC: %s\n  sensor: %s\n  message: %s \n",MAC, argv[2], std_out);
         //strcpy(operation.data, "Esta es Una PRUEBA");  /* data */
         operation.len = strlen (operation.data);  /* len */
         if ((numbytes = sendto (sockfd, (char *) &operation,
@@ -73,7 +80,6 @@ int main (int argc, char *argv[])
         printf ("(cliente) operacion enviada [op 0x%x id %d longitud %d]\n",
                 operation.op, operation.id, operation.len);
 
-        /* espera resultado de la operacion */
 
         /* cierra el socket */
         close (sockfd);
