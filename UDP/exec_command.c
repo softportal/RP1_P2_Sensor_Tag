@@ -2,20 +2,20 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
-#define PATH_MAX 80
+#define RESPONSE_SIZE 80 // no copiar a common
 
 
 int execute_command(char *command,char *output){
 	int errn,stat;
 	FILE *fp;
-	char path[PATH_MAX];
+	char path[RESPONSE_SIZE];
 	fp=popen(command,"r");
 	if(fp==NULL){
 		errn=errno;
 		printf("popen\t:%s",strerror(errn));
 		exit(EXIT_FAILURE);
 	}
-	while (fgets(path, PATH_MAX, fp) != NULL){
+	while (fgets(path, RESPONSE_SIZE, fp) != NULL){
 	  //  sprintf(output,"%s", path);
 		strcat(output,path);
 	}
