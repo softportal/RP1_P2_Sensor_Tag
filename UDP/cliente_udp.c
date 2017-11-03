@@ -32,7 +32,7 @@ int main (int argc, char *argv[])
 
         sprintf(command, "gatttool -b %s -a %s --char-read", MAC, argv[2]);
 
-        if (execute_command(command_test, std_out) !=0 )
+        if (execute_command(command, std_out) !=0 )
         {
             printf("\ncouldnt execute command\n");
             exit (1);
