@@ -7,7 +7,7 @@ Habilita las notificaciones de temperatura para que se reciba un mensaje cada ve
 
 Vamos a activar el sensor de temperatura Desde la shell:
     
-    $ gatttool -b B0:91:22:EA:81:04 -a 0x27 --char-write -n 01
+    $ gatttool -b B0:91:22:EA:81:04 -a 0x27 --char-write-req -n 01
     $ gatttool -b B0:91:22:EA:81:04 -a 0x24 --char-read
 
 A partir de ahora podemos leer el handler 0x24 para saber la temperatura en hexadimal (ojo, los valores vienen cambiados).
