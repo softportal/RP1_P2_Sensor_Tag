@@ -1,12 +1,7 @@
 #include "common.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <errno.h>
-#include <string.h>
 
 
 int execute_command(char *command,char *output){
-	int RESPONSE_SIZE = 80; // Definir al gusto
 	int errn,stat;
 	FILE *fp;
 	char path[RESPONSE_SIZE];
