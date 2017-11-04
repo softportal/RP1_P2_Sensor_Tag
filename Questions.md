@@ -97,7 +97,8 @@ volvemos a la consola:
         $ cd build
         $ python /home/user-iot/.local/bin/hexmerge.py -o SENSORTAG_CUSTOM.hex \
                                                             -r 0000:1FFFF \
-          sensortag_cc2650stk_app.hex:0000:1EFFF sensortag_cc2650stk_stack.hex
+          sensortag_cc2650stk_app.hex:0000:1EFFF sensortag_cc2650stk_stack.hex \
+          bim_extflash.hex:0000:1FFFF --overlap=error
 
 Ya tenemos nuestro binario preparado en SENSORTAG_CUSTOM.hex, solo tenemos que abrir uniflash y flashear nuestro sensortag. Una vez reiniciado (el sensortag) se puede comprobar satisfactoriamente desde el movil que la versión apunta a 2.00.
 
