@@ -49,6 +49,25 @@ Crea un pequeño programa C que muestre la temperatura ambiente y del objeto a p
 ### 3
 Repite el proceso anterior con algún otro sensor de entre los disponibles en el SensorTag. Puedes encontrar documentación sobre cómo tratar los datos y los UUID de las características de cada sensor en la guía de usuario del SensorTag (http://processors.wiki.ti.com/index.php/CC2650_SensorTag_User’s_Guide.). 
 
+Para esta parte primero vamos a descubrir cuales son los handlers que hay que manejar, para ello primero acudimos a la wiki o al fichero de configuración del sensor de humedad
+
+Data 	AA21* 	R/N 	4 	
+Notification 	2902 	R/W 	
+Configuration 	AA22* 	R/W 	
+Period 	AA23* 	R/W 	1
+
+ya sabemos los UUID que nos dirán los handlers, ahora mediante BLE y nuestra ci40:
+
+    $ mkdir sensortag
+    $ gatttool -b B0:91:22:EA:81:04 --char-desc > chardesc
+    $ cat chardesc | grep aa22
+    handle = 0x002f, uuid = f000aa22-0451-4000-b000-000000000000
+    $ cat chardesc | grep aa21
+    handle = 0x002c, uuid = f000aa21-0451-4000-b000-000000000000
+
+Ya sabemos la confiruación la escribimos en 0x002f y la lectura en 0x002c!
+
+
 Vamos a activar el sensor de humedad (todo desde el modo interactivo:
 
     [B0:91:22:EA:81:04][LE]> char-write-cmd 0x2f 01
