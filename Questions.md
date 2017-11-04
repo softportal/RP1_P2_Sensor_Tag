@@ -51,10 +51,12 @@ Repite el proceso anterior con algún otro sensor de entre los disponibles en el
 
 Para esta parte primero vamos a descubrir cuales son los handlers que hay que manejar, para ello primero acudimos a la wiki o al fichero de configuración del sensor de humedad
 
-Data 	AA21* 	R/N 	4 	
-Notification 	2902 	R/W 	
-Configuration 	AA22* 	R/W 	
-Period 	AA23* 	R/W 	1
+info          | value
+--------------|-------------------
+Data          | AA21* 	R/N 	4 	
+Notification  |	2902 	R/W 	
+Configuration | AA22* 	R/W 	
+Period 	AA23* | R/W 	1
 
 ya sabemos los UUID que nos dirán los handlers, ahora mediante BLE y nuestra ci40:
 
