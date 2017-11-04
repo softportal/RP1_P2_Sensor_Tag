@@ -5,7 +5,10 @@
 ###  1
 Habilita las notificaciones de temperatura para que se reciba un mensaje cada vez que ésta cambia. Intenta modificar también la frecuencia de refresco del sensor.
 
-Vamos a activar el sensor de temperatura Desde la shell:
+Vamos a activar el sensor de temperatura Desde la shell.
+Para poder usar gatttool sin el modo interactivo usamos la siguiente sintaxis:
+
+    $ gatttool -b B0:91:22:EA:81:04 --characteristics
     
     $ gatttool -b B0:91:22:EA:81:04 -a 0x27 --char-write-req -n 01
     $ gatttool -b B0:91:22:EA:81:04 -a 0x24 --char-read
@@ -40,9 +43,7 @@ Modo Interactivo:
 ### 2
 Crea un pequeño programa C que muestre la temperatura ambiente y del objeto a partir de los cuatro bytes recibidos desde el sensor. El programa recibirá como argumento los cuatro bytes devueltos por una petición al SensorTag, y mostrará por pantalla la temperatura ambiente y del objeto en grados centígrados. 
 
-Para poder usar gatttool sin el modo interactivo usamos la siguiente sintaxis:
 
-    $ gatttool -b B0:91:22:EA:81:04 --characteristics
 
 
 ### 3
@@ -74,6 +75,29 @@ versión. Por ejemplo, si ahora mismo estás ejecutando la versión 1.30, convi�
 la versión 2.00. Una vez descargado, comprueba que todo funciona correctamente
 desde la aplicación móvil o utilizando gatttool y que, efectivamente, la versión
 del firmware visible desde la aplicación móvil es la correcta.
+
+Para esta tarea lo único que haremos será abrir la maquina virtual para acceder a los proyectos.
+Ctrl-alt-T
+
+    $ vim $(find ~/ti | grep sensortag_revision)
+ 
+ Buscamos la parte de la versión y la cambiamos por 2.00
+ 
+        #if defined (CC1350_LAUNCHXL) | defined (CC2650_LAUNCHXL)
+        #define FW_VERSION      1.20
+        #elif defined (CC1350STK) | defined (CC2650STK)
+        #define FW_VERSION      2.00
+        #endi
+        
+A continuación hemos decidido usar el code composer sobre workspace para compilar los proyectos necesitados (app y stack).
+volvemos a la consola:
+
+        $ cd ~/workspace
+        $ mkdir build && cp $(find . | egrep *.hex) build)
+        $ cd build
+        $ python /home/user-iot/.local/bin/hexmerge.py -o SENSORTAG_CUSTOM.hex -r 0000:1FFFF          sensortag_cc2650stk_app.hex:0000:1EFFF sensortag_cc2650stk_stack.hex
+
+Ya tenemos nuestro binario preparado en SENSORTAG_CUSTOM.hex, solo tenemos que abrir uniflash y flashear nuestro sensortag. Una vez reiniciado (el sensortag) se puede comprobar satisfactoriamente desde el movil que la versión apunta a 2.00.
 
 ### 6
 Estudia el proceso completo de configuración y publicación del sensor de temperatura,
