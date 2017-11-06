@@ -2,7 +2,7 @@
 #include <stdio.h>
 typedef unsigned short uint16_t;
 
-int termtable[31][21] = {{16, 16, 17, 17, 17, 18, 18, 19, 19, 19, 19, 19, 20, 20, 20, 21, 21, 21, 21, 21, 21 },
+static int termtable[31][21] = {{16, 16, 17, 17, 17, 18, 18, 19, 19, 19, 19, 19, 20, 20, 20, 21, 21, 21, 21, 21, 21 },
                          {18, 18, 18, 19, 19, 19, 19, 19, 20, 20, 20, 20, 21, 21, 21, 22, 22 ,22 ,22, 22, 23 },
                          {19, 19, 19, 20, 20, 20, 20, 20, 21, 21, 21, 21, 22, 22, 22, 22, 23 ,23 ,23, 23, 24 },
                          {20, 20, 20, 20, 21, 21, 22, 22, 22, 23, 23, 23, 23, 24, 24, 24, 24 ,24 ,24, 25, 25 },
@@ -35,7 +35,7 @@ int termtable[31][21] = {{16, 16, 17, 17, 17, 18, 18, 19, 19, 19, 19, 19, 20, 20
                          {42, 45, 48, 50, 55 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 }
                         };
 
-int term_sen(uint16_t temperature, uint16_t humidity)
+uint16_t term_sen(uint16_t temperature, uint16_t humidity)
 {
     int t, h;
 
@@ -47,7 +47,7 @@ int term_sen(uint16_t temperature, uint16_t humidity)
     t = (int)temperature - 20;
     h = (int)humidity/5;
 
-    return termtable[t][h];
+    return (uint16_t)termtable[t][h];
 }
 
 int main()
@@ -58,7 +58,7 @@ int main()
     printf("Example case: %hu grados, %hu de humedad\n", a, b);
     
     if ((success = term_sen(a, b)) != -1)
-        printf("\n %i \n", term_sen(a, b));
+        printf("\n %hu \n", term_sen(a, b));
     else
         printf ("\n not found\n");
 
