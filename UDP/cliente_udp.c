@@ -3,9 +3,7 @@
 
 #include "common.h"
 
-#define COMMAND_LENGTH 64
 #define PUERTO_REMOTO PUERTO /* puerto remoto en el servidor al que se envian los mensajes */
-#define MAC "B0:91:22:EA:81:04"
 
 int main (int argc, char *argv[])
 {
@@ -15,10 +13,10 @@ int main (int argc, char *argv[])
         char buf[MAXDATASIZE];          /* buffer de recepcion */
         struct idappdata operation;     /* mensaje de operacion enviado */
         int numbytes;                   /* numero de bytes recibidos o enviados */
+        struct hndrel relations[2];
         size_t sin_size;
         char command[COMMAND_LENGTH];
         char command_test[] = "cat temperature";
-        char out_buff[] = "aqui va a venir el resultado biiiitch";
 
         char std_out[RESPONSE_SIZE];
         memset (std_out, '\0', RESPONSE_SIZE);  /* Pone a cero el resto de la estructura */
@@ -30,11 +28,20 @@ int main (int argc, char *argv[])
                 exit (1);
         }
 
+
+
+        inithndrel(relations);
+        if (activate(relations, argv[2]) == -1)
+        {
+            pp("sensors available: 0x24(temp) 0x2c(hum)");
+            exit(-1);
+        }
+
         sprintf(command, "gatttool -b %s -a %s --char-read", MAC, argv[2]);
 
         if (execute_command(command, std_out) !=0 )
         {
-            printf("\ncouldnt execute command\n");
+            pp("couldnt execute command");
             exit (1);
         }
 
